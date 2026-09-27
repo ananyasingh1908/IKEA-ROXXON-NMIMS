@@ -27,14 +27,29 @@
         });
       }
 
+      // Wire up "Explore IKEA" anchor -> /marketplace
+      function patchExploreIkeaLink() {
+        var links = document.querySelectorAll('.hero-button a');
+        links.forEach(function (link) {
+          if (link.textContent.trim() === 'Explore IKEA' && !link.dataset.patched) {
+            link.dataset.patched = '1';
+            link.href = 'http://localhost:8080/secondhand.html';
+          }
+        });
+      }
+
       // Run after React mounts
       var observer = new MutationObserver(function () {
         patchExploreButton();
+        patchExploreIkeaLink();
       });
       observer.observe(document.getElementById('root'), { childList: true, subtree: true });
 
       // Also try immediately after DOM ready
-      document.addEventListener('DOMContentLoaded', patchExploreButton);
+      document.addEventListener('DOMContentLoaded', function () {
+        patchExploreButton();
+        patchExploreIkeaLink();
+      });
     })();
   </script>
 </body>
